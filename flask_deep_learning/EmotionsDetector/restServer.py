@@ -35,8 +35,8 @@ def predict():
 
 	if flask.request.method == "GET":
 		phrase = flask.request.args['phrase']
-		string = ""
 		phrase = collect_paragraph_elements(phrase)
+		phrase_copy = phrase[:]
 
 		phrase = my_net.tfidf_vector.transform([phrase])
 		prediction = ""
@@ -53,7 +53,7 @@ def predict():
 				highest_prediction = pred
 
 		data["emotion"] = reverse_mappings[index_of_highest]
-		data["superData"] = string
+		data["text_data"] = phrase_copy
 		data["success"] = True
 
 	return flask.jsonify(data)
@@ -77,6 +77,9 @@ def collect_paragraph_elements(input_url):
 	if url_is_valid == False:
 		return input_url_copy
 
+	if input_url[:7] != 'http://' and input_url[:8] != 'https://':
+		input_url = 'https://' + input_url
+
 	try:
 		response_GET = requests.get(input_url)
 		response_GET.raise_for_status()
@@ -84,6 +87,7 @@ def collect_paragraph_elements(input_url):
 		paragraph_elements = bs4.BeautifulSoup(response_GET.text, features="html5lib")
 		paragraph_elements = paragraph_elements.select('p')
 
+		string = ""
 		for element in paragraph_elements:
 			string += element.getText()
 

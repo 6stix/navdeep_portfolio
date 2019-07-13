@@ -1,164 +1,68 @@
-<html lang="en"><head>
-    <meta charset="utf-8">
-    <link rel="shortcut icon" href="/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="theme-color" content="#000000">
-    <link rel="manifest" href="/manifest.json">
-    <title>EmoDetection</title>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>EmoDetection</title>
 
-<style type="text/css">
-body {
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
-</style><style type="text/css">.App {
-  text-align: center;
-}
-
-header {
-  background: black;
-  height: 5rem;
-  color: white;
-  margin: 0;
-  padding: 0;
-}
-
-h2 {
-  margin: 0;
-  padding-top: 20px;
-}
-
-.placeholder {
-  color: gray;
-  height: 100%;
-word-wrap: break-word;
-
-}
-input {
-  width: 30%;
-  margin-top: 5%;
-  height: 30px;
-}
-
-button {
-  height: 40px;
-  width: 100px;
-  margin: 10px;
-  border-style: none;
-  background: #27e02e;
-}
-
-button:hover {
-  cursor: pointer;
-}
-
-button:active {
-  background: rgb(3, 58, 20);
-  color: white;
-}
-
-.result_box {
-  border-radius: 5px;
-  background: #9e9e9e85;
-  min-height: 15rem;
-  width: 70%;
-  margin: 2rem auto;
-  padding: 5px 0;
-}
-
-.text-box {
-  height: 100%;
-  word-wrap: break-word;
-  color: rgb(16, 116, 19);
-}
-
-#clear {
-  background: red;
-  color: white;
-}
-
-a {
-  text-decoration: none;
-  color: white;
-  border-radius: 5px;
-  padding: 5px;
-}
-
-#fieldset {
-  background: rgb(255, 153, 0);
-}
-
-
-#url_box {
-  background: #27c4e0;
-}</style><style type="text/css"></style><style type="text/css">.response_response__2XU33{
-    border-radius: 5px;
-    background: rgb(236, 235, 235);
-    min-height: 100px;
-    width: 50%;
-    margin: 20px auto;
-  }
-
-  .response_response__2XU33>p{
-      padding-top: 30px;
-  }</style>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
 <body>
-<div id="root" style="text-align:center;" ><div class="App"><header><h2>EmoDetection!</h2></header><div><input id="inputID" placeholder=" enter your text here" type="text" value="">
-<button onclick="submitClick()">Submit</button></div>
+  <div id="root" style="text-align:center;">
+    <div class="App"><header><h2>Emotion Detector</h2></header>
+      <div><input id="inputID" placeholder=" enter your text here" type="text" value="">
+        <button onclick="submitClick()">Submit</button>
+      </div>
 
-<div style="text-align:center;" class="result_box"><div id="yourText">
+      <div style="text-align:center;" class="result_box">
+        <div id="yourText">
+          <h3 id="input_value_placeholder">Input some text :)</h3>
+          <h3 id="emotion_placeholder"></h3>
+          <img id="picture_placeholder" src="">
+          <p id ="CORPUSTEXT"></p>
+        </div>
+      </div>
 
-<h3 id="input_value_placeholder">Input some text :)</h3><h3 id="emotion_placeholder"></h3><img id="picture_placeholder" src=""><p id ="CORPUSTEXT"></p></div></div>
+      <div style="text-align: center;"></div>
+    </div>
+    <button style="display: inline-block;" onclick="clearAll()" id="clear">Clear all</button>
+  </div>
 
-<div style="text-align: center;"></div></div>
-<button style="display: inline-block;" onclick="clearAll()" id="clear">Clear all</button></div></div>
+  <script>
+  function clearAll() {
+    // This function clears the placeholder fields.
+  	var element_1 = document.getElementById("input_value_placeholder");
+  	var element_2 = document.getElementById("emotion_placeholder");
+    var element_picture = document.getElementById("picture_placeholder");
+  	element_1.innerHTML = "Input some text :)";
+  	element_2.innerHTML = "";
+    element_picture.src = "";
+  }
 
-<script src="/static/js/bundle.js"></script><script src="/static/js/1.chunk.js"></script><script src="/static/js/main.chunk.js"></script><script src="/main.adfde04febc44d79e72b.hot-update.js"></script>
+  function submitClick() {
+    // This function makes a request to the server for a prediction on the user's
+    // inputted text.
+    document.getElementById("input_value_placeholder").innerHTML = "Your text: " + document.getElementById("inputID").value;
+    $.ajax({
+      type:"GET",
+      dataType: "json",
+      data: {phrase: document.getElementById("inputID").value},
+      url: "http://localhost:5000/predict",
+      success: function(data){
+      	var element = document.getElementById("emotion_placeholder");
+      	element.innerHTML = "Our guess: " + data['emotion'];
 
-<script>
+      	var picture = document.getElementById("picture_placeholder");
+      	picture.src = "images/" + data['emotion'] + ".jpg";
+      	picture.style.width = "400px";
+      	picture.style.height = "250px";
 
-function clearAll() {
-	var element_1 = document.getElementById("input_value_placeholder");
-	var element_2 = document.getElementById("emotion_placeholder");
-  var element_picture = document.getElementById("picture_placeholder");
-	element_1.innerHTML = "Input some text :)";
-	element_2.innerHTML = "";
-  element_picture.src = "";
-}
-
-function submitClick() {
-  document.getElementById("input_value_placeholder").innerHTML = "Your text: " + document.getElementById("inputID").value;
-  $.ajax({
-    type:"GET",
-    dataType: "json",
-    data: {phrase: document.getElementById("inputID").value},
-    url: "http://localhost:5000/predict",
-    success: function(data){
-    	var element = document.getElementById("emotion_placeholder");
-    	element.innerHTML = "Our guess: " + data['emotion'];
-    	var picture = document.getElementById("picture_placeholder");
-    	picture.src = "images/" + data['emotion'] + ".jpg";
-    	picture.style.width = "400px";
-    	picture.style.height = "250px";
-    	var docText = data["superData"];
-    	document.getElementById("CORPUSTEXT").innerHTML = docText;
-    }
-  });
-}
-</script>
+      	var docText = data["text_data"];
+        console.log(data);
+      	document.getElementById("CORPUSTEXT").innerHTML = docText;
+      }
+    });
+  }
+  </script>
 </body>
 </html>
