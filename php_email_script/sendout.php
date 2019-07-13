@@ -38,9 +38,9 @@
      )));
 
     // Did the query get any posts?
-    if($query->have_posts()){
+    if ($query->have_posts()) {
         // While there still are posts in the query
-        while($query->have_posts()){
+        while ($query->have_posts()) {
             // Change the global post variable to the next post in the query
             $query->the_post();
             $currentPermalink = get_permalink();
@@ -79,33 +79,33 @@
         }
 
         echo "<div class='articles' style='width: 100%;margin: 0 auto;'>";
-        if(empty($news) == false) {
-            echo "<div class='categoryDivider' style='width: 100%;margin: 0 auto;'><div class='categoryText' style='font-family: Oswald, sans-serif;font-size: 25px;color: #AB1616;'>News</div><div class='categoryLineBreak'><hr></div></div>";
+        if (empty($news) == false) {
+            printCategoryDivider("News");
             popToBeauty($news);
         }
 
-        if(empty($campusJournal) == false) {
-            echo "<div class='categoryDivider' style='width: 100%;margin: 0 auto;'><div class='categoryText' style='font-family: Oswald, sans-serif;font-size: 25px;color: #AB1616;'>Campus Journal</div><div class='categoryLineBreak'><hr></div></div>";
+        if (empty($campusJournal) == false) {
+            printCategoryDivider("Campus Journal");
             popToBeauty($campusJournal);
         }
 
-        if(empty($staffEditorials) == false) {
-            echo "<div class='categoryDivider' style='width: 100%;margin: 0 auto;'><div class='categoryText' style='font-family: Oswald, sans-serif;font-size: 25px;color: #AB1616;'>Staff Editorials</div><div class='categoryLineBreak'><hr></div></div>";
+        if (empty($staffEditorials) == false) {
+            printCategoryDivider("Staff Editorials");
             popToBeauty($staffEditorials);
         }
 
-        if(empty($arts) == false) {
-            echo "<div class='categoryDivider' style='width: 100%;margin: 0 auto;'><div class='categoryText' style='font-family: Oswald, sans-serif;font-size: 25px;color: #AB1616;'>Arts</div><div class='categoryLineBreak'><hr></div></div>";
+        if (empty($arts) == false) {
+            printCategoryDivider("Arts");
             popToBeauty($arts);
         }
 
-        if(empty($opinions) == false) {
-            echo "<div class='categoryDivider' style='width: 100%;margin: 0 auto;'><div class='categoryText' style='font-family: Oswald, sans-serif;font-size: 25px;color: #AB1616;'>Opinions</div><div class='categoryLineBreak'><hr></div></div>";
+        if (empty($opinions) == false) {
+            printCategoryDivider("Opinions");
             popToBeauty($opinions);
         }
 
-        if(empty($sports) == false) {
-            echo "<div class='categoryDivider' style='width: 100%;margin: 0 auto;'><div class='categoryText' style='font-family: Oswald, sans-serif;font-size: 25px;color: #AB1616;'>Sports</div><div class='categoryLineBreak'><hr></div></div>";
+        if (empty($sports) == false) {
+            printCategoryDivider("Sports");
             popToBeauty($sports);
         }
 
@@ -132,9 +132,14 @@
         }
     }
 
-    function popToBeauty($array){
-        /* This function puts the array of articles into a prettier HTML version. */
-        while($array){
+    function printCategoryDivider($category) {
+        echo "<div class='categoryDivider' style='width: 100%;margin: 0 auto;'><div class='categoryText' style='font-family: Oswald, sans-serif;font-size: 25px;color: #AB1616;'>";
+        echo $category."</div><div class='categoryLineBreak'><hr></div></div>";
+    }
+
+    function popToBeauty($array) {
+        /* This function outputs the array of articles as a prettier HTML representation. */
+        while ($array) {
             $content = array_pop($array);
             $link = array_pop($array);
             $title = array_pop($array);
