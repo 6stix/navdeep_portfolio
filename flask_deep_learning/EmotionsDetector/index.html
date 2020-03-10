@@ -1,0 +1,68 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>EmoDetection</title>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="root" style="text-align:center;">
+    <div class="App"><header><h2>Emotion Detector</h2></header>
+      <div><input id="inputID" placeholder=" enter your text here" type="text" value="">
+        <button onclick="submitClick()">Submit</button>
+      </div>
+
+      <div style="text-align:center;" class="result_box">
+        <div id="yourText">
+          <h3 id="input_value_placeholder">Input some text :)</h3>
+          <h3 id="emotion_placeholder"></h3>
+          <img id="picture_placeholder" src="">
+          <p id ="CORPUSTEXT"></p>
+        </div>
+      </div>
+
+      <div style="text-align: center;"></div>
+    </div>
+    <button style="display: inline-block;" onclick="clearAll()" id="clear">Clear all</button>
+  </div>
+
+  <script>
+  function clearAll() {
+    // This function clears the placeholder fields.
+  	var element_1 = document.getElementById("input_value_placeholder");
+  	var element_2 = document.getElementById("emotion_placeholder");
+    var element_picture = document.getElementById("picture_placeholder");
+  	element_1.innerHTML = "Input some text :)";
+  	element_2.innerHTML = "";
+    element_picture.src = "";
+  }
+
+  function submitClick() {
+    // This function makes a request to the server for a prediction on the user's
+    // inputted text.
+    document.getElementById("input_value_placeholder").innerHTML = "Your text: " + document.getElementById("inputID").value;
+    $.ajax({
+      type:"GET",
+      dataType: "json",
+      data: {phrase: document.getElementById("inputID").value},
+      url: "http://localhost:5000/predict",
+      success: function(data){
+      	var element = document.getElementById("emotion_placeholder");
+      	element.innerHTML = "Our guess: " + data['emotion'];
+
+      	var picture = document.getElementById("picture_placeholder");
+      	picture.src = "images/" + data['emotion'] + ".jpg";
+      	picture.style.width = "400px";
+      	picture.style.height = "250px";
+
+      	var docText = data["text_data"];
+        console.log(data);
+      	document.getElementById("CORPUSTEXT").innerHTML = docText;
+      }
+    });
+  }
+  </script>
+</body>
+</html>

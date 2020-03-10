@@ -1,0 +1,39 @@
+Name: 6stix
+
+Analysis
+
+1. What values of k did you try?
+I tried numerous values of k, including 1 through 499. I also tried 600, 800,
+1000, and 1200! The graphs help show the results from these values of k.
+
+2. Which value of k produced the highest accuracy? What general trends did you
+observe as k increased?
+The smaller values of k produced the highest accuracies. As k increases, the
+likelihood of mis-matched-labeled neighbors becoming a part of the set of the
+nearest neighbors increases as well. So, in general, as k increases, the accuracy decreases. The graphs show this trend.
+
+3. When using the entire training dataset, what are your observations about the
+runtime of K-nearest neighbors? List 1-2 ideas for making this algorithm faster.
+The algorithm is relatively slow. I think one potential idea is to try to
+"save" locality somehow. To demonstrate this, let's consider an example where
+k = 3. Let's say that we find that test point A's 3 nearest neighbors are
+labeled as: 0, 0, 1. Now, let's say that we are checking test point B's
+nearest neighbors. If it is the case that test point B is extremely close to A
+relative to the other data points, then we might be able to assign B's nearest
+neighbors to be the same as A's. I don't think this would reduce time
+complexity as Big O models a worst-case complexity, but it might speed up real-
+time! Another idea I have is maybe to use dynamic programming when calculating
+the larger k's. Let's say our program performs the KNN algorithm for multiple
+values of k. We can save the smaller-k nearest neighbors in a dictionary for
+each test point, so, at each step, we could check fewer neighbors. This, again,
+I don't think speeds up the time complexity as this might lead to more of a
+triangulation scenario of (n choose k) runtime which is basically O(n^2).
+Actually, on second thought, it might be better than I originally thought.
+Let's say that k = 100. We already have the first 100, but now we only have to
+calculate distances for the remaining training points. Actually, nevermind. The
+time complexity is still essentially (n^2). I think locality might be a better
+optimization, if that's the right word to use!
+After thinking about it more, I could imagine using the training data points to
+shade in regions of labels. If a test point falls in a certain region, then we
+label it as that region. This region-creation would happen in the beginning of
+the program according to the number of neighbors.
